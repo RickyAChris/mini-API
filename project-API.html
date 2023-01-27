@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" placeholder="Enter word" oninput="setWord(event)">
+    <button onclick="defineWord()">View Definition</button>
+
+    <div id="theWord">
+
+    </div>
+
+</body>
+<script>
+    let wordDef = {};
+    let aWord = "";
+
+    function setWord(event = new Event()){
+        aWord = event.target.value;
+    }
+
+    async function defineWord(){
+        const httpResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+aWord);
+
+        const body = await httpResponse.json();
+        console.log(body);
+        wordDef = body[0].meanings[0].definitions[0];
+        renderTheWord();
+    }
+    
+    function renderTheWord(){
+        const word = wordDef.word;
+        const definition =  wordDef.definition;
+        const theWordDiv = document.getElementById("theWord");
+
+        // word heading
+        const wordHeading = document.createElement("h3");
+        wordHeading.innerText = word;
+
+        //definition heading
+        const definitionHeading = document.createElement("h4");
+        definitionHeading.innerHTML = definition;
+
+        theWordDiv.appendChild(wordHeading);
+        theWordDiv.appendChild(definitionHeading);
+
+    }
+</script>
+</html>
+
+<!-- 
+Write a web page that interacts with an API.
+You can choose the API
+It can be on anything you want so long as it is work appropriate
+examples
+Magic the gathering
+World of Warcraft
+Weather API
+List of free apis
+PICK AN API THAT DOES NOT HAVE CORS
+If you make a fetch request and see CORS in the error on the console pick another API!
+When you are finished push your code to github and host it
+I will give you an hour Monday morning as extra time to work on it.
+You will demo it Monday 
+-->
