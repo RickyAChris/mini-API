@@ -6,7 +6,28 @@
     <style>
         body {
             font-family: Merriweather;
-            background-color: lightgrey;
+            background-color: rgb(224, 224, 224);
+        }
+
+        input{
+            border: 1px solid darkslategray;
+            border-radius: 3px;
+            outline: none;
+        
+        }
+
+        input:focus::placeholder {
+            color: transparent;
+        }
+
+        button{
+            border: 1px solid darkslategray;
+            border-radius: 3px;
+        }
+
+        button:hover{
+            background-color: rgb(135, 229, 250);
+            box-shadow: 1px 1px 1px darkslategray;
         }
 
         .container {
@@ -23,6 +44,8 @@
 
         .inputField { 
             grid-area: inputField;
+            text-align: center;
+            margin: 10px;
             
         }
 
@@ -42,12 +65,15 @@
 </head>
 <body>
     <div class="inputField">
-        <h1>Dictionary Definition Search Tool</h1>
-    <input type="text" placeholder="Enter word" oninput="setWord(event)">
-    <button onclick="defineWord()">View Definition</button>
+        <h1 style="border: 1px white solid; display:inline; border-radius: 3%; background-color: white; box-shadow: 3px 3px 3px darkslategrey;">Dictionary Definition Search Tool</h1>
     </div>
 
-    <div class="wordName" id="theWord"></div>
+    <div class="wordName" id="theWord">
+        <div style="text-align:center;">
+            <input type="text" placeholder="Enter word" oninput="setWord(event)">
+            <button onclick="defineWord()">View Definition</button>
+        </div>
+    </div>
     <div class="wordDefinitions"></div>
     <div class="madeBy"></div>
 
@@ -63,7 +89,15 @@
     async function defineWord(){
         const httpResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+aWord);
 
+
         const body = await httpResponse.json();
+
+        if(httpResponse.status === 500){
+            alert(`Something went wrong, and it's not your fault. Try again at a later time.`);
+            console.log(body);
+            return;
+        }
+        
         console.log(body);
         wordDef[0] = aWord;
         wordDef[1] = body[0].meanings[0].definitions[0];
